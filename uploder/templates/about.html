@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- How It Works Section -->
+<section class="py-5 text-white" style="background: linear-gradient(135deg, #6a11cb, #2575fc);">
+    <div class="container text-center">
+      <div class="container text-center">
+        <h1 class="fw-bold mb-4">Powerful Features</h1>
+        <p >Unlock the full potential of seamless file transfers with our feature-rich uploader.</p>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card feature-card p-4">
+                    <h5 class="fw-bold">📂 Drag & Drop Upload</h5>
+                    <p>Effortlessly upload files by simply dragging and dropping them into your browser.</p>
+                </div>
+                <div class="card feature-card p-4">
+                    <h5 class="fw-bold">🛡 Secure & Encrypted</h5>
+                    <p>Your files are encrypted during transfer, ensuring complete security and privacy.</p>
+                </div>
+                <div class="card feature-card p-4">
+                    <h5 class="fw-bold">🚀 High-Speed Transfers</h5>
+                    <p>Experience lightning-fast file uploads with our optimized transfer protocol.</p>
+                </div>
+                <div class="card feature-card p-4">
+                    <h5 class="fw-bold">💼 Business-Friendly</h5>
+                    <p>Perfect for teams and businesses looking for a reliable file-sharing solution.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card feature-card p-4">
+                    <h5 class="fw-bold">📡 No Software Required</h5>
+                    <p>Upload and manage files directly from your browser without any installations.</p>
+                </div>
+                <div class="card feature-card p-4">
+                    <h5 class="fw-bold">🔄 Unlimited Uploads</h5>
+                    <p>No file size limits! Upload large files without worrying about restrictions.</p>
+                </div>
+                <div class="card feature-card p-4">
+                    <h5 class="fw-bold">📊 Real-Time Progress</h5>
+                    <p>Track your upload progress in real-time with detailed status indicators.</p>
+                </div>
+                <div class="card feature-card p-4">
+                    <h5 class="fw-bold">🌍 Access Anywhere</h5>
+                    <p>Sync your uploads with Google Drive™ and access them from any device.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        {% if user.isauthenticated %}
+            <a href="{% url "register" %}" class="btn btn-warning btn-lg mt-3">Start for Free</a>
+        {% else %}
+            <a href="{% url "home" %}" class="btn btn-warning btn-lg mt-3">Start</a>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    
+</section>
+
+{% endblock content %}

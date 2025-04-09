@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UploaderNX</title>
+    <link rel="stylesheet" href="{% static "static/style.css" %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container">
+            {% if user.is_authenticated %}
+            <a class="navbar-brand" href="{% url "home" %}">UploaderNX</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url "upload" %}">Uploader</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url "about" %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url "logout" %}" class="text-bg-white text-decoration-none btn btn-outline-warning">LOGOUT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url "profile" %}" class="text-bg-white text-decoration-none btn btn-outline-warning">Welcome, {{user.username}}</a></li>
+                </ul>
+            {% else %}
+            <a class="navbar-brand" href="{% url "front_page" %}">UploaderNX</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'front_page' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url "about" %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url "register" %}" class="text-bg-white text-decoration-none btn btn-outline-warning">SIGNUP</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url "login" %}" class="text-bg-white text-decoration-none btn btn-outline-warning">LOGIN</a></li>
+                </ul>
+            {% endif %}
+            <div class="form-check form-switch d-flex align-items-center">
+                <input class="form-check-input form-control ms-1" style="width: 3rem; height: 1.5rem;" type="checkbox" id="darkModeToggle">
+                <label class="form-check-label text-white ms-2" for="darkModeToggle" id="txt">Dark Mode</label>
+            </div>
+            
+            </div>
+        </div>
+    </nav>
+
+    {% block hero %}
+    <section class="hero">
+        <div class="container text-center mt-5">
+            <h1 class="mt-4">Welcome to UploaderNX</h1>
+            <p class="lead">Upload and manage your documents with ease.</p>
+            <a href="{% url 'upload' %}" class="btn btn-lg btn-success upload-btn">Upload Now</a>
+            
+        </div>
+       
+        
+        
+    </section>
+    {% endblock hero %}
+    
+    {% block content %}
+    <section class="file-section">
+        <div class="container file-section d-flex flex-column">
+            <div class='w-50'>
+                <form method="GET" action="{% url 'home' %}" class="container mt-3">
+                    <div class="input-group w-100">
+                        <input type="text" name="q" class="form-control" placeholder="Search files" value="{{ request.GET.q }}">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
+                    </div>
+                </form>
+            </div>
+            
+            <br><br>
+            <h2 class="text-center mb-5">Uploaded Files</h2>
+            <form method="GET" class="align-item-end">
+                <input type="hidden" name="q" value="{{ query }}">
+                <button type="submit" name="sort" value="{% if sort_order == 'asc' %}desc{% else %}asc{% endif %}" class="btn btn-outline-secondary">
+                    Sort by Last Modified 
+                    {% if sort_order == 'asc' %}
+                        <i class="fa-solid fa-arrow-up"></i> <!-- Ascending -->
+                    {% else %}
+                        <i class="fa-solid fa-arrow-down"></i> <!-- Descending -->
+                    {% endif %}
+                </button>
+            </form>
+            <br><br><br>
+            <div class="row justify-content-center">
+
+                {% for i in documents %}
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4 icard">
+                    <div class="card file-card">
+                        <div class="icontainer">
+                            {% if i.image %}
+                                <img class="card-img-top" src="{{ i.image.url }}" alt="Uploaded Image">
+                            {% else %}
+                                <img class="card-img-top" src="{% static 'default.jpg' %}" alt="Default Image">
+                            {% endif %}
+                        </div>
+                        <div class="card-body text-center">
+                            {% if i.files %}
+                                <a href="{{ i.files.url }}" class="btn btn-primary">View File</a>
+                                <p class="card-text mt-2">Uploaded on: {{ i.addDate }}</p>
+                                <a href="{{ i.files.url }}" class="btn btn-success" download>Download</a>
+                                <form action="{% url 'delete_document' i.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this document?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger mt-2">Delete</button>
+                                </form>
+                            {% else %}
+                                <p class="text-danger">No file uploaded</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endblock content %}
+    <section>
+        <div class="footer bg-white d-flex justify-content-center mt-5 p-5">
+            <h5>@Copyright 2025 BY UploaderNX </h5>
+        </div>
+    </section>
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        const body = document.body;
+        const text = document.getElementById('txt');
+
+        // Check saved mode
+        if (localStorage.getItem("darkMode") === "enabled") {
+            body.classList.add("dark-mode");
+            darkModeToggle.checked = true;
+        }
+
+        darkModeToggle.addEventListener("change", () => {
+            if (darkModeToggle.checked) {
+                body.classList.add("dark-mode");
+                txt.innerHTML = "Dark Mode";
+
+                localStorage.setItem("darkMode", "enabled");
+            } else {
+                body.classList.remove("dark-mode");
+                txt.innerHTML = "Light Mode";
+                localStorage.setItem("darkMode", "disabled");
+            }
+        });
+    </script>
+
+</body>
+</html>

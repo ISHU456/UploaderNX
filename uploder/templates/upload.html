@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class=" iupload-container">
+    <h2 >Upload Your Document</h2>
+    <p >Select your file and click upload.</p>
+
+    <form action="." method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'home' %}" class="btn btn-secondary btn-custom">Go Back</a>
+            <input type="submit" value="Upload" class="btn btn-success btn-custom">
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock content %}

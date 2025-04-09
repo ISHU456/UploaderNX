@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block hero %}
+<br>
+{% endblock hero %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class=" text-center p-4">
+                <img src="{{ profile.profile_pic.url }}" class="rounded-circle profile-img mx-auto mb-3" alt="User">
+                <h3 class="profile-name">{{ request.user.username }}</h3>
+                <p class="profile-bio">{{ profile.bio }}</p>
+                <p><strong>Location:</strong> {{ profile.location }}</p>
+                <p><strong>Skills:</strong> {{ profile.skills }}</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

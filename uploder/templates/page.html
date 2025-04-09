@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block hero %}
+
+<section class="hero ">
+    <div class="made-hero">
+        <h1 class="mt-4">Welcome to UploaderNX</h1>
+        <p class="lead">Upload and manage your documents with ease.</p>
+        {% if user.is_authenticated %}
+        <a href="{% url 'about' %}" class="btn btn-lg btn-success upload-btn">EXPLORE</a>
+        
+        {% else %}
+        <a href="{% url 'register' %}" class="btn btn-lg btn-success upload-btn">SIGN UP</a>
+        {% endif %}
+
+    </div>
+</section>
+   
+{% endblock hero %}
+
+{% block content %}
+
+
+{% endblock content %}
